@@ -1,11 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { Switch, HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import AddEntryPage from '../Pages/AddEntryPage';
 import ManageGenresPage from '../Pages/ManageGenresPage';
-
-let A = 1;
-let B = 2;
 
 export default function App() {
   return (
