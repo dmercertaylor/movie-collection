@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { Switch, HashRouter as Router, Route, Redirect } from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import AddEntryPage from '../Pages/AddEntryPage';
 import ManageGenresPage from '../Pages/ManageGenresPage';
 
 export default function App() {
+
+  const dispatch = useCallback(useDispatch(), []);
+
+  useEffect(() => {
+    dispatch({type: 'GET_GENRES'});
+  }, [dispatch]);
+
   return (
     <div className="App">
       <Router>

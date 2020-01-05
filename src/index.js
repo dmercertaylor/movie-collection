@@ -14,11 +14,13 @@ import getGenresSaga from './redux/sagas/getGenresSaga'
 /*** IMPORT REDUCERS ***/
 import moviesReducer from './redux/reducers/movies.reducer';
 import genresReducer from './redux/reducers/genres.reducer';
+import addMovieSaga from './redux/sagas/addMovieSaga';
 
 // rootSaga will run our saga reducers
 function* rootSaga(){
     yield takeEvery('GET_MOVIES', getMoviesSaga);
     yield takeEvery('GET_GENRES', getGenresSaga);
+    yield takeEvery('ADD_MOVIE', addMovieSaga);
 }
 
 const sagaMiddleware = createSagaMiddleware();
