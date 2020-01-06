@@ -3,6 +3,7 @@ const multer = require('multer');
 const pool = require ('../modules/pool');
 const uploadFile = require('../modules/upload');
 const getFileExtension = require('../modules/getFileExtension');
+const deleteFromS3 = require('../modules/deleteFromS3');
 
 const router = express.Router();
 const upload = multer();
@@ -43,7 +44,6 @@ router.get('/', (req, res)=>{
 
     pool.query(queryText, config)
         .then(result => {
-            console.log(result.rows);
             result.rows.forEach(movie => {
                 if(!movie.genres){
                     movie.genres = [];
@@ -57,20 +57,22 @@ router.get('/', (req, res)=>{
         });
 });
 
-router.delete('/:id', (req, res)=>{
-    pool.query('DELETE FROM "movie" WHERE "id"=$1', [req.params.id])
-        .then(result => {
-            pool.query('DELETE FROM "movie_genre" WHERE "movie_id"=$1', [req.params.id])
-                .then(results => {
-                    res.sendStatus(200);
-                }).catch(error => {
-                    console.log(error);
-                    res.sendStatus(500);
-                });
-        }).catch(error => {
-            console.log(error);
-            res.sendStatus(500);
-        });
+router.delete('/:id', async (req, res)=>{
+    try{
+        await pool.query('DELETE FROM "movie_genre" WHERE "movie_id"=$1', [req.params.id]);
+        let posterUrl = await pool.query(
+            `DELETE FROM "movie" WHERE "id"=$1 RETURNING "poster"`,
+            [req.params.id]
+        );
+        console.log(posterUrl);
+        posterUrl = posterUrl.rows[0].poster.split('amazonaws.com/')[1];
+        await deleteFromS3(posterUrl);
+        
+        res.sendStatus(200);
+    } catch(error){
+        console.log(error);
+        res.sendStatus(500);
+    };
 });
 
 /*** POST ROUTE ***/

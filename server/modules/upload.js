@@ -1,13 +1,8 @@
-const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
+const s3 = require('./s3');
 dotenv.config();
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-});
 
 module.exports = (fileName, fileContent) => {
-    console.log(fileName, fileContent);
     // Setting up S3 upload parameters
     const params = {
         Bucket: process.env.BUCKET_NAME || 'dmt-movie-posters',
