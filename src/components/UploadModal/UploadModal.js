@@ -20,21 +20,24 @@ const useStyle = makeStyles({
     },
     dragAndDropArea: {
         width: '90%',
-        padding: '20%',
+        height: '75%',
         border: '5px dashed #C0C0C0',
         margin: 'auto',
         textAlign: 'center',
+        display: 'flex',
+        flexDirection: "column",
+        justifyContent: 'center'
     },
     dragAndDropContainer: {
         display: 'flex',
         flexFlow: 'column nowrap',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%'
+        height: '100%',
+        padding: '2rem'
     },
     cancleButton: {
-        alignSelf: 'flex-end',
-        margin: '1rem'
+        alignSelf: 'flex-end'
     }
 });
 

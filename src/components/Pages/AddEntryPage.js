@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import MovieInputFields from '../MovieInputFields/MovieInputFields';
 import MovieCard from '../MovieCard/MovieCard';
 import LoadingCard from '../MovieCard/LoadingCard';
+
+// material ui
 import {makeStyles} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles({
+    body: {
+        marginTop: '16px',
+        textAlign: 'center'
+    },
     movieDisplay: {
         display: 'flex',
-        flexFlow: 'row wrap'
+        flexFlow: 'row wrap',
+        justifyContent: 'space-around'
     }
 });
 
@@ -16,6 +24,7 @@ export default function AddEntryPage(){
     /*** STATE SETUP ***/
     const movies = useSelector(state=>state.moviesReducer);
     const movieLoading = useSelector(state=>state.loadingMovieReducer);
+    const [addMovieOpen, setAddMovieOpen] = useState(false);
     const classes = useStyles();
 
     /*** REDUX SETUP ***/
@@ -28,8 +37,12 @@ export default function AddEntryPage(){
     }, [dispatch]);
 
     return (
-        <div>
-            <MovieInputFields />
+        <div className={classes.body}>
+            <Button variant='contained' color='primary'
+                onClick={()=>setAddMovieOpen(true)}>
+                Add Movie
+            </Button>
+            <MovieInputFields open={addMovieOpen} close={()=>setAddMovieOpen(false)} />
             <div className={classes.movieDisplay}>
                 {movies.map(movie=> <MovieCard key={movie.id} movie={movie} />)}
                 {movieLoading?<LoadingCard />:null}

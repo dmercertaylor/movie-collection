@@ -9,21 +9,29 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
+import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
 
 // Components
 import UploadModal from '../UploadModal/UploadModal';
 
 const useStyles = makeStyles({
-    centerText: {
-        textAlign: 'center'
+    inputModal: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '100vw',
+        padding: '1.5rem',
+        width: 'max-content'
     },
     form: {
         display: 'flex',
         flexFlow: 'column',
         alignItems: 'flex-start',
         margin: '0 auto',
-        width: 'max-content',
-        textAlign: 'center'
+        width: '100%',
+        maxWidth: 'max-content'
     },
     button: {
         margin: '6px',
@@ -34,7 +42,8 @@ const useStyles = makeStyles({
     },
     container: {
         display: 'flex',
-        flexFlow: 'row wrap'
+        flexFlow: 'row wrap',
+        maxWidth: '100%'
     },
     newRow: {
         width: '100%'
@@ -58,7 +67,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function MovieInputFields(){
+export default function MovieInputFields({open, close}){
     
     /*** STATE SETUP ***/
     const [title, setTitle] = useState('');
@@ -149,6 +158,7 @@ export default function MovieInputFields(){
         }
         resetState();
         dispatch({type: 'ADD_MOVIE', payload});
+        close();
     }
 
     /*** MAPPED ITEMS ***/
@@ -175,76 +185,80 @@ export default function MovieInputFields(){
 
     /*** RETURN ***/
     return (
-        <div className={classes.centerText}>
-            <Typography variant='h4'>Add Movie</Typography>
-            <form onSubmit={submitMovie} className={classes.form}>
-                <TextField
-                    className={classes.margin}
-                    label="Title"
-                    color="primary"
-                    value={title}
-                    onChange={ e => setTitle(e.target.value) }
-                />
-                <div className={classes.container}>
+        <Modal open={open} onBackdropClick={close}>
+            <Paper className={classes.inputModal}>
+                <Typography variant='h4'>Add Movie</Typography>
+                <form onSubmit={submitMovie} className={classes.form}>
                     <TextField
                         className={classes.margin}
-                        type="date" 
-                        label="Release Date"
-                        value={releaseDate}
-                        InputLabelProps={{shrink: true}}
-                        onChange={e=>setReleaseDate(e.target.value)}
+                        label="Title"
+                        color="primary"
+                        value={title}
+                        onChange={ e => setTitle(e.target.value) }
                     />
-                    <TextField
-                        className={classes.margin}
-                        type="text"
-                        label="Run Time"
-                        value={runtime}
-                        onChange={verifyAndSetRuntime}
-                        placeholder='0:00'
-                    />
-                </div>
-                <div className={classes.container}>
-                    <FormControl className={classes.margin}>
-                        <InputLabel shrink htmlFor='movieInputGenre'>Add Genre</InputLabel>
-                        <Select
-                            native
-                            id='movieInputGenre'
-                            onChange={ e=>setSelectedGenres(
-                                [JSON.parse(e.target.value), ...selectedGenres]
-                            )}
-                            inputProps={{'aria-label':'genre'}}
-                        >
-                            <option value=''>Select Genre</option>
-                            {addableGenres}
-                        </Select>
-                    </FormControl>
-                    {removeableGenres}
-                </div>
-                <div className={`${classes.container} ${classes.newRow}`}>
-                    <div className={classes.posterContainer}>
-                        {posterPreview!==null ?
-                            <img src={posterPreview} alt='New poster' className={classes.posterPreview} />
-                            : null }
-                        <Button
-                            className={classes.button}
-                            variant='contained'
-                            onClick={()=>setFileDialogOpen(true)}
-                        >
-                        {posterPreview? 'Change':'Upload'} Poster
-                        </Button>
-                        <UploadModal
-                            open={fileDialogOpen}
-                            onDrop={saveAndCloseDialog}
-                            close={()=>setFileDialogOpen(false)}
+                    <div className={classes.container}>
+                        <TextField
+                            className={classes.margin}
+                            type="date" 
+                            label="Release Date"
+                            value={releaseDate}
+                            InputLabelProps={{shrink: true}}
+                            onChange={e=>setReleaseDate(e.target.value)}
+                        />
+                        <TextField
+                            className={classes.margin}
+                            type="text"
+                            label="Run Time"
+                            value={runtime}
+                            onChange={verifyAndSetRuntime}
+                            placeholder='0:00'
                         />
                     </div>
-                    <Button variant='contained' color='primary'
-                        className={classes.button} onClick={submitMovie}
-                    >
-                        Submit
-                    </Button>
-                </div>
-            </form>
-        </div>
+                    <div className={classes.newRow}>
+                        <FormControl className={classes.margin}>
+                            <InputLabel shrink htmlFor='movieInputGenre'>Add Genre</InputLabel>
+                            <Select
+                                native
+                                id='movieInputGenre'
+                                onChange={ e=>setSelectedGenres(
+                                    [JSON.parse(e.target.value), ...selectedGenres]
+                                )}
+                                inputProps={{'aria-label':'genre'}}
+                            >
+                                <option value=''>Select Genre</option>
+                                {addableGenres}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className={classes.newRow}>
+                        {removeableGenres}
+                    </div>
+                    <div className={`${classes.container} ${classes.newRow}`}>
+                        <div className={classes.posterContainer}>
+                            {posterPreview!==null ?
+                                <img src={posterPreview} alt='New poster' className={classes.posterPreview} />
+                                : null }
+                            <Button
+                                className={classes.button}
+                                variant='contained'
+                                onClick={()=>setFileDialogOpen(true)}
+                            >
+                            {posterPreview? 'Change':'Upload'} Poster
+                            </Button>
+                            <UploadModal
+                                open={fileDialogOpen}
+                                onDrop={saveAndCloseDialog}
+                                close={()=>setFileDialogOpen(false)}
+                            />
+                        </div>
+                        <Button variant='contained' color='primary'
+                            className={classes.button} onClick={submitMovie}
+                        >
+                            Submit
+                        </Button>
+                    </div>
+                </form>
+            </Paper>
+        </Modal>
     )
 }
