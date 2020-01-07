@@ -9,13 +9,22 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
     card: {
         display: 'flex',
-        maxWidth: 400
+        flexFlow: 'column nowrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        maxWidth: 400,
+        minWidth: 200,
+        maxHeight: 600,
+        margin: 8
     },
-    media: {
-        height: 140
+    center: {
+        
+    },
+    poster: {
+        maxWidth: 200
     },
     runtime: {
         color: '#777777'
@@ -28,36 +37,32 @@ export default function MovieCard({movie}){
 
     return (
         <Card className={classes.card}>
-            <div className={classes.poster}>
-            <p>{JSON.stringify(movie)}</p>
-                <CardMedia
-                    component="img"
-                    image={movie.poster}
-                    title={movie.title}
-                />
-            </div>
-            <div className={classes.details}>
-                <CardHeader
-                    title={movie.title}
-                    subheader={
-                        `${movie.release_date} - ${movie.run_time.hours}:${movie.run_time.minutes}`
-                    }
-                />
-                <CardContent>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {movie.genres.map((genre, i)=> 
-                            `${genre.name}${i !== movie.genres.length - 1 ? ', ' : ''}`
-                        )}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small" color="primary"
-                        onClick={()=>dispatch({type: 'DELETE_MOVIE', payload: movie})}
-                    >
-                        Delete
-                    </Button>
-                </CardActions>
-            </div>
+            <CardMedia
+                className={classes.poster}
+                component="img"
+                image={movie.poster}
+                title={movie.title}
+            />
+            <CardHeader
+                title={movie.title}
+                subheader={
+                    `${movie.release_date} - ${movie.run_time.hours}:${movie.run_time.minutes}`
+                }
+            />
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {movie.genres.map((genre, i)=> 
+                        `${genre.name}${i !== movie.genres.length - 1 ? ', ' : ''}`
+                    )}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small" color="secondary" variant='contained'
+                    onClick={()=>dispatch({type: 'DELETE_MOVIE', payload: movie})}
+                >
+                    Delete
+                </Button>
+            </CardActions>
         </Card>
     )
 }

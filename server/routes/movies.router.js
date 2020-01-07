@@ -64,9 +64,10 @@ router.delete('/:id', async (req, res)=>{
             `DELETE FROM "movie" WHERE "id"=$1 RETURNING "poster"`,
             [req.params.id]
         );
-        console.log(posterUrl);
-        posterUrl = posterUrl.rows[0].poster.split('amazonaws.com/')[1];
-        await deleteFromS3(posterUrl);
+        if(posterUrl){
+            posterUrl = posterUrl.rows[0].poster.split('amazonaws.com/')[1];
+            await deleteFromS3(posterUrl);
+        }
         
         res.sendStatus(200);
     } catch(error){

@@ -1,12 +1,29 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState, } from 'react';
 import { Switch, HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import NavBar from '../NavBar/NavBar';
 import AddEntryPage from '../Pages/AddEntryPage';
 import ManageGenresPage from '../Pages/ManageGenresPage';
+import Typography from '@material-ui/core/Typography';
+import { MuiThemeProvider, createMuiTheme, makeStyles} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+const useStyles = makeStyles({
+  header: {
+    textAlign: 'center'
+  }
+})
 
 export default function App() {
 
+  const [theme, setTheme] = useState({
+    palette: {
+      type: 'dark'
+    }
+  });
+
+  const classes = useStyles();
+  const muiTheme = createMuiTheme(theme);
   const dispatch = useCallback(useDispatch(), []);
 
   useEffect(() => {
@@ -14,10 +31,13 @@ export default function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline />
       <Router>
-        <header className="App-header">
-          <h1>Movie Database</h1>
+        <header className={classes.header}>
+          <Typography variant='h2' component='h1'>
+            Movie Database
+          </Typography>
           <NavBar />
         </header>
         <Switch>
@@ -32,6 +52,6 @@ export default function App() {
           </Route>
         </Switch>
       </Router>
-    </div>
+    </MuiThemeProvider>
   );
 }
