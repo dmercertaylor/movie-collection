@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, } from 'react';
+import React, {useCallback, useEffect, useState } from 'react';
 import { Switch, HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import NavBar from '../NavBar/NavBar';

@@ -2,7 +2,6 @@ import React, {useState, useCallback} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Material-UI
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
@@ -15,57 +14,9 @@ import Paper from '@material-ui/core/Paper';
 // Components
 import UploadModal from '../UploadModal/UploadModal';
 
-const useStyles = makeStyles({
-    inputModal: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        maxWidth: '100vw',
-        padding: '1.5rem',
-        width: 'max-content'
-    },
-    form: {
-        display: 'flex',
-        flexFlow: 'column',
-        alignItems: 'flex-start',
-        margin: '0 auto',
-        width: '100%',
-        maxWidth: 'max-content'
-    },
-    button: {
-        margin: '6px',
-        alignSelf: 'flex-end'
-    },
-    margin: {
-        margin: '8px'
-    },
-    container: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        maxWidth: '100%'
-    },
-    newRow: {
-        width: '100%'
-    },
-    posterContainer: {
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        maxWidth: '11rem',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        height: '100%'
-    },
-    posterPreview: {
-        borderRadius: '4px',
-        width: '80%',
-        height: 'auto'
-    },
-    clearBackground: {
-        backgroundColor: 'rgba(0,0,0,0) !important',
-        color: 'black'
-    }
-});
+// style
+import useStyles from './style';
+
 
 export default function MovieInputFields({open, close}){
     
@@ -233,24 +184,26 @@ export default function MovieInputFields({open, close}){
                     <div className={classes.newRow}>
                         {removeableGenres}
                     </div>
-                    <div className={`${classes.container} ${classes.newRow}`}>
-                        <div className={classes.posterContainer}>
-                            {posterPreview!==null ?
-                                <img src={posterPreview} alt='New poster' className={classes.posterPreview} />
-                                : null }
-                            <Button
-                                className={classes.button}
-                                variant='contained'
-                                onClick={()=>setFileDialogOpen(true)}
-                            >
+                    <div className={`${classes.newRow} ${classes.posterContainer}`}>
+                        {posterPreview!==null ?
+                            <img src={posterPreview} alt='New poster' className={classes.posterPreview} />
+                            : null }
+                        <Button
+                            className={classes.button}
+                            variant='contained'
+                            onClick={()=>setFileDialogOpen(true)}
+                        >
                             {posterPreview? 'Change':'Upload'} Poster
-                            </Button>
-                            <UploadModal
-                                open={fileDialogOpen}
-                                onDrop={saveAndCloseDialog}
-                                close={()=>setFileDialogOpen(false)}
-                            />
-                        </div>
+                        </Button>
+                        <UploadModal
+                            open={fileDialogOpen}
+                            onDrop={saveAndCloseDialog}
+                            close={()=>setFileDialogOpen(false)}
+                        />
+                    </div>
+                    <div className={classes.newRow}>
+                        <Button variant='contained' color='secondary'
+                            className={classes.button} onClick={close}>Cancle</Button>
                         <Button variant='contained' color='primary'
                             className={classes.button} onClick={submitMovie}
                         >

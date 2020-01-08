@@ -16,7 +16,8 @@ const useStyles = makeStyles({
     movieDisplay: {
         display: 'flex',
         flexFlow: 'row wrap',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginTop: '0.75rem'
     }
 });
 
