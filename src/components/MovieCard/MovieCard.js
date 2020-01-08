@@ -31,6 +31,7 @@ export const useStyles = makeStyles({
     }
 });
 
+// Displays data from movie object in decent card
 export default function MovieCard({movie}){
     const classes = useStyles();
     const dispatch = useDispatch();

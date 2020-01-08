@@ -16,6 +16,7 @@ const useStyles = makeStyles({
 
 export default function App() {
 
+  // This setTheme to 'light' or 'dark'
   const [theme, setTheme] = useState({
     palette: {
       type: 'dark'
@@ -26,6 +27,7 @@ export default function App() {
   const muiTheme = createMuiTheme(theme);
   const dispatch = useCallback(useDispatch(), []);
 
+  // Get genre when app first renders.
   useEffect(() => {
     dispatch({type: 'GET_GENRES'});
   }, [dispatch]);

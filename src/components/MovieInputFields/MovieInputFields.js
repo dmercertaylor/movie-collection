@@ -30,6 +30,7 @@ export default function MovieInputFields({open, close}){
     const [posterPreview, setPosterPreview] = useState(null);
     const classes = useStyles();
 
+    // Updates setTime, making sure format is valid
     const verifyAndSetRuntime = event => {
         const newTime = event.target.value;
         if(/^\d$/.test(newTime) && runtime === ''){
@@ -39,6 +40,7 @@ export default function MovieInputFields({open, close}){
         }
     }
 
+    // resets state
     const resetState = () => {
         setTitle('');
         setSelectedGenres([]);
@@ -50,6 +52,7 @@ export default function MovieInputFields({open, close}){
         setPoster(null);
     }
 
+    // Reads file from upload modal and closes it
     const saveAndCloseDialog = (files) => {
         const reader = new FileReader();
         
@@ -67,8 +70,9 @@ export default function MovieInputFields({open, close}){
     const genres = useSelector(state => state.genresReducer);
 
     /*** HANDLE SUBMIT ***/
+    // Does basic input validation, resets state,
+    // adds movie, and closes modal.
     const submitMovie = event => {
-        console.log(poster);
         event.preventDefault();
 
         if(!title){
@@ -92,12 +96,14 @@ export default function MovieInputFields({open, close}){
             return;
         }
 
+        // Format time correctly
         let sentRuntime = runtime;
         if(!sentRuntime.includes(':')){
             sentRuntime += ':00';
         } else if(sentRuntime.split(':')[1].length === 1){
             sentRuntime += '0';
         }
+
         const payload = {
             movie: {
                 title: title,
@@ -113,6 +119,8 @@ export default function MovieInputFields({open, close}){
     }
 
     /*** MAPPED ITEMS ***/
+    // Maps selected genres as buttons that,
+    // when clicked, remove genre */
     const removeableGenres = selectedGenres.map((genre, i) =>
         <Button variant='outlined' key={genre.id}
             color='secondary' className={classes.button}
@@ -135,6 +143,7 @@ export default function MovieInputFields({open, close}){
     }).filter(a=>a!==null);
 
     /*** RETURN ***/
+    // TODO: Break this up.
     return (
         <Modal open={open} onBackdropClick={close}>
             <Paper className={classes.inputModal}>

@@ -5,6 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useLocation } from "react-router-dom";
 
+/* Auto-generates unique ids & aria controls for tabs */
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -12,6 +13,7 @@ function a11yProps(index) {
     };
 }
 
+/* Includes links to addEntry and manageGenre */
 export default function NavBar(){
     const location = useLocation();
     const [value, setValue] = useState(location.pathname==='/manageGenres'?1:0);
